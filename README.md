@@ -1,6 +1,6 @@
-# CHART_NAME
+# helmchart-repo-template
 
-CHART_DESCRIPTION
+GitHub repository template for Helm charts, pre-configured with CI/CD, semantic versioning, documentation, and Renovate Bot.
 
 ## What's included
 
@@ -13,19 +13,19 @@ CHART_DESCRIPTION
 - **MkDocs Material** documentation site, published to `gh-pages`
 - **Renovate Bot** — dependency updates
 
-## How to use
+## Usage
 
 1. Click **"Use this template"** on GitHub to create a new repository.
-2. The `init-repo` workflow runs automatically on the first push to `main`.
+2. The `Init Repository` workflow runs automatically on the first push to `main`.
 3. It will:
    - Run `helm create charts/<repo-name>` to scaffold a fresh Helm chart.
-   - Replace all `CHART_NAME` / `GITHUB_OWNER` placeholders across all config files.
+   - Replace all placeholders across config files with the repo name and owner.
    - Create `artifacthub-pkg.yml` and `README.md.gotmpl` for the chart.
-   - Delete itself and commit everything.
+   - Delete itself and commit everything with `[skip ci]`.
 
 ## Required secrets
 
 | Secret | Description |
 |---|---|
-| `DEVOPS_BUDDY_APP_ID` | GitHub App ID used for automation commits |
-| `DEVOPS_BUDDY_PRIVATE_KEY` | GitHub App private key |
+| `GITHUB_APP_ID` | GitHub App ID used for automation commits |
+| `GITHUB_APP_PRIVATE_KEY` | GitHub App private key |

@@ -48,5 +48,5 @@ When a commit is pushed to `main`, the release pipeline will:
 
 The repository must have the following secrets configured:
 
-- `DEVOPS_BUDDY_APP_ID`: The ID of the GitHub App used for automation.
-- `DEVOPS_BUDDY_PRIVATE_KEY`: The private key of the GitHub App.
+- `GITHUB_APP_ID`: The ID of the GitHub App used for automation.
+- `GITHUB_APP_PRIVATE_KEY`: The private key of the GitHub App.

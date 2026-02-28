@@ -21,6 +21,7 @@ concurrency:
 jobs:
   check-init:
     name: Check if repo is initialised
+    if: ${{ !github.event.repository.is_template }}
     runs-on: ubuntu-latest
     outputs:
       initialised: ${{ steps.check.outputs.initialised }}

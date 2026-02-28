@@ -11,16 +11,19 @@ permissions:
 jobs:
   actionlint:
     name: Lint workflows
+    if: ${{ !github.event.repository.is_template }}
     uses: AutomationDojo/reusable-cicd/.github/workflows/actionlint.yml@main
 
   helm-lint:
     name: Lint Helm chart
+    if: ${{ !github.event.repository.is_template }}
     uses: AutomationDojo/reusable-cicd/.github/workflows/helm-lint.yml@main
     with:
       config: .github/configs/ct.yaml
 
   helm-docs:
     name: Update chart docs
+    if: ${{ !github.event.repository.is_template }}
     uses: AutomationDojo/reusable-cicd/.github/workflows/helm-docs.yml@main
     with:
       chart_search_root: charts/
