@@ -43,7 +43,7 @@ jobs:
     uses: AutomationDojo/reusable-cicd/.github/workflows/semantic-release_simple-release.yml@main
     with:
       node-version: "20"
-      chart-path: "charts/CHART_NAME"
+      chart-path: "charts/${{ github.event.repository.name }}"
       extra-plugins: |
         semantic-release-helm
         @semantic-release/exec
