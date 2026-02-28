@@ -1,0 +1,49 @@
+branches:
+  - main
+
+tagFormat: v${version}
+
+plugins:
+  - "@semantic-release/commit-analyzer"
+  - "@semantic-release/release-notes-generator"
+
+  # Update Chart.yaml version and appVersion (both set to release version)
+  - ["semantic-release-helm", {
+      chartPath: "charts/CHART_NAME",
+      populateChangelog: true
+    }]
+
+  # Ensure version and appVersion have no "v" prefix (semver only, for OCI/Artifact Hub)
+  - ["@semantic-release/exec", {
+      prepareCmd: "python3 .github/scripts/normalize-chart-version.py charts/CHART_NAME/Chart.yaml"
+    }]
+
+  # Update root CHANGELOG.md
+  - ["@semantic-release/changelog", { changelogFile: "CHANGELOG.md" }]
+
+  # Update chart CHANGELOG.md (same release notes as root)
+  - ["@semantic-release/changelog", { changelogFile: "charts/CHART_NAME/CHANGELOG.md" }]
+
+  # Regenerate Helm chart README using helm-docs
+  - ["@semantic-release/exec", {
+      prepareCmd: "helm-docs --chart-search-root=charts/ --output-file=README.md"
+    }]
+
+  # Update Artifact Hub package metadata with changes parsed from CHANGELOG
+  - ["@semantic-release/exec", {
+      prepareCmd: "python3 .github/scripts/update-artifacthub-changes.py charts/CHART_NAME ${nextRelease.version}"
+    }]
+
+  # Commit all generated files
+  - ["@semantic-release/git", {
+      assets: [
+        "charts/CHART_NAME/Chart.yaml",
+        "charts/CHART_NAME/CHANGELOG.md",
+        "charts/CHART_NAME/README.md",
+        "charts/CHART_NAME/artifacthub-pkg.yml",
+        "CHANGELOG.md"
+      ],
+      message: "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+    }]
+
+  - "@semantic-release/github"

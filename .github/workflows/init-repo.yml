@@ -1,0 +1,40 @@
+name: Init Repository
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  init:
+    # Only runs once — when the repo is first created from the template.
+    # charts/.gitkeep exists in the template but charts/<chart-name>/ does not.
+    name: Initialise Helm chart from template
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if already initialised
+        id: check
+        run: |
+          if [ -d "charts/${{ github.event.repository.name }}" ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.check.outputs.skip == 'false'
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Helm
+        if: steps.check.outputs.skip == 'false'
+        uses: azure/setup-helm@v4
+
+      - name: Initialise chart
+        if: steps.check.outputs.skip == 'false'
+        uses: AutomationDojo/reusable-cicd/helm/repo-init@main
+        with:
+          commit-token: ${{ secrets.GITHUB_TOKEN }}

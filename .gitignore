@@ -1,0 +1,30 @@
+# MkDocs build output
+site/
+
+# Helm
+*.tgz
+.cr-release-packages/
+
+# SOPS
+secrets.dec.yaml
+secrets.dec.yaml.enc
+
+# Python virtualenv
+venv/
+
+# Editors
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+*~
+.idea/
+.vscode/
+.cursor/
+
+# OS
+.DS_Store
+
+# Claude
+.claude/

@@ -1,0 +1,33 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  actionlint:
+    name: Lint workflows
+    uses: AutomationDojo/reusable-cicd/.github/workflows/actionlint.yml@main
+
+  helm-lint:
+    name: Lint Helm chart
+    uses: AutomationDojo/reusable-cicd/.github/workflows/helm-lint.yml@main
+    with:
+      config: .github/configs/ct.yaml
+
+  helm-docs:
+    name: Update chart docs
+    uses: AutomationDojo/reusable-cicd/.github/workflows/helm-docs.yml@main
+    with:
+      chart_search_root: charts/
+      values_file: values.yaml
+      output_file: README.md
+      git_push: true
+      git_commit_message: "docs: update helm-docs"
+    secrets:
+      GITHUB_APP_ID: ${{ secrets.GITHUB_APP_ID }}
+      GITHUB_APP_PRIVATE_KEY: ${{ secrets.GITHUB_APP_PRIVATE_KEY }}
